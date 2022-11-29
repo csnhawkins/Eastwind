@@ -1,0 +1,24 @@
+{
+  "version": "2.0",
+  "name": "",
+  "id": "78dbbc7b-6e5c-4a60-9b4a-798a92d9a062",
+  "databaseType": "SqlServer",
+  "development": {
+    "scriptsFolder": "./schema-model"
+  },
+  "deployment": {
+    "flywayConfFiles": [
+      "./flyway.conf"
+    ],
+    "targetDatabases": [
+      {
+        "connectionProvider": {
+          "url": "jdbc:sqlserver://localhost;databaseName=Westwind;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
+          "type": "UsernamePassword"
+        },
+        "schemas": [],
+        "displayName": "Westwind (Production)"
+      }
+    ]
+  }
+}

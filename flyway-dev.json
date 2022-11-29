@@ -3,6 +3,13 @@
   "name": "",
   "id": "78dbbc7b-6e5c-4a60-9b4a-798a92d9a062",
   "databaseType": "SqlServer",
+  "developmentDatabase": {
+    "connectionProvider": {
+      "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Dev;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
+      "type": "UsernamePassword"
+    },
+    "displayName": "Westwind (Development Database)"
+  },
   "development": {
     "scriptsFolder": "./schema-model"
   },
@@ -10,6 +17,14 @@
     "flywayConfFiles": [
       "./flyway.conf"
     ],
+    "shadowDatabase": {
+      "connectionProvider": {
+        "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Shadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
+        "type": "UsernamePassword"
+      },
+      "displayName": "Westwind (Shadow Database)"
+    },
+    "generateUndoScripts": true,
     "targetDatabases": [
       {
         "connectionProvider": {
@@ -18,6 +33,14 @@
         },
         "schemas": [],
         "displayName": "Westwind (Production)"
+      },
+      {
+        "connectionProvider": {
+          "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Test;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
+          "type": "UsernamePassword"
+        },
+        "schemas": [],
+        "displayName": "Westwind (Test Database)"
       }
     ]
   }

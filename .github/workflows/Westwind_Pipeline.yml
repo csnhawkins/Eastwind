@@ -52,6 +52,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      
+       # Runs the Flyway Clean command within a Docker Container against the Build database
+      - name: Echo Commands
+        run: |
+          echo "The Flyway Environment Variable is - $FLYWAY"
 
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB

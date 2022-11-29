@@ -54,18 +54,18 @@ jobs:
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB
         run: |
-          $(FLYWAY) info clean info -url='$(JDBC)' -cleanDisabled='false'
+          $FLYWAY info clean info -url='$JDBC' -cleanDisabled='false'
         
       # Runs the Flyway Migrate command within a Docker Container against the Build database
       - name: Migrate Build DB
         run: |
-          $(FLYWAY) info migrate info -url='$(JDBC)' -cleanDisabled='false'
+          $FLYWAY info migrate info -url='$JDBC' -cleanDisabled='false'
           
       # Runs the Flyway Undo command within a Docker Container against the Build database
       - name: undo Build DB
         if: ${{ false }}
         run: |
-          $(FLYWAY) info undo info -url='$(JDBC)' -cleanDisabled='false'
+          $FLYWAY info undo info -url='$JDBC' -cleanDisabled='false'
       
   prod:
     # The type of runner that the job will run on

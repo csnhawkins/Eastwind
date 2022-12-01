@@ -68,15 +68,15 @@ jobs:
         
       # Runs the Flyway Migrate command within a Docker Container against the Build database
       - name: Migrate Build DB
-        if: ${{ false }}
+        if: ${{ true }}
         run: |
-          $FLYWAY info migrate info -url='$JDBC' -cleanDisabled='false'
+          docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info migrate info -url='$JDBC' -cleanDisabled='false'
           
       # Runs the Flyway Undo command within a Docker Container against the Build database
       - name: undo Build DB
-        if: ${{ false }}
+        if: ${{ true }}
         run: |
-          $FLYWAY info undo info -url='$JDBC' -cleanDisabled='false'
+          docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info undo info -url='$JDBC' -cleanDisabled='false'
       
   prod:
     # The type of runner that the job will run on

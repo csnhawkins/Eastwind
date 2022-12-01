@@ -6,9 +6,10 @@ name: Westwind GitHub Pipeline
 on:
   # Triggers the workflow on push or pull request events but only for the "release" branch
   push:
-    branches: [ "release" ]
-  pull_request:
-    branches: [ "release" ]
+    branches:
+      - release
+      - 'migrations/**'
+
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -74,7 +75,7 @@ jobs:
           
       # Runs the Flyway Undo command within a Docker Container against the Build database
       - name: undo Build DB
-        if: ${{ true }}
+        if: ${{ false }}
         run: |
           docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info undo info -url="$JDBC" -cleanDisabled='false'
       

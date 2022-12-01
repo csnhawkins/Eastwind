@@ -58,12 +58,13 @@ jobs:
         if: ${{ true }}
         run: |
           echo "The Flyway Environment Variable is - Username is $userName - Password is $password - JDBC is $JDBC - And Flyway Command is $FLYWAY"
+          echo $env
 
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB
         if: ${{ true }}
         run: |
-          docker run --rm -v "$(GITHUB_WORKSPACE)/migrations":/flyway/migrations -v "$(GITHUB_WORKSPACE)":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info clean info -url="$JDBC" -cleanDisabled='false'
+          docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info clean info -url="$JDBC" -cleanDisabled='false'
         
       # Runs the Flyway Migrate command within a Docker Container against the Build database
       - name: Migrate Build DB

@@ -41,6 +41,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: 'build' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+    if: ${{ false }} #Set this variable to false to temporarily disable the job
     env:
       stage: 'Build'
       databaseName: ${{ secrets.databaseName}}
@@ -82,7 +83,8 @@ jobs:
   prod-preparation:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
-      environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+      environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured
+      if: ${{ false }} #Set this variable to false to temporarily disable the job
       needs: build
       env:
         stage: 'Prod'
@@ -115,7 +117,8 @@ jobs:
   prod:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: 'prod-preparation' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+    environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+    if: ${{ true }} #Set this variable to false to temporarily disable the job
     needs: prod-preparation
     env:
       stage: 'Prod'

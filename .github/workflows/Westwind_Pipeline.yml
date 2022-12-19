@@ -41,7 +41,6 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: 'build' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
-    if: ${{ false }} #Set this variable to false to temporarily disable the job
     env:
       stage: 'Build'
       databaseName: ${{ secrets.databaseName}}
@@ -49,37 +48,38 @@ jobs:
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
       displayName: 'Build'
-      pauseForCodeReview: false
+      executeBuild: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-       # Runs the Flyway Clean command within a Docker Container against the Build database
-      - name: Echo Commands
-        if: ${{ true }}
-        run: |
-          echo "The Flyway Environment Variable is - Username is $userName - Password is $password - JDBC is $JDBC - And Flyway Command is $FLYWAY"
-          echo $env
-
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB
-        if: ${{ true }}
+        if: env.executeBuild == 'true'
         run: |
           docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info clean info -url="$JDBC" -cleanDisabled='false'
         
       # Runs the Flyway Migrate command within a Docker Container against the Build database
       - name: Migrate Build DB
-        if: ${{ true }}
+        if: env.executeBuild == 'true'
         run: |
           docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info migrate info -url="$JDBC" -cleanDisabled='false'
           
       # Runs the Flyway Undo command within a Docker Container against the Build database
       - name: undo Build DB
-        if: ${{ false }}
+        if: env.executeBuild == 'true'
         run: |
           docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info undo info -url="$JDBC" -cleanDisabled='false'
+      
+      #After migration scripts are validated, publish them as an artifact
+      - name: Publish Validated Migration Scripts as Artifact
+        uses: actions/upload-artifact@v2
+        with: 
+          name: flyway-artifacts
+          path: /flyway/migrations/
+
   prod-preparation:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
@@ -97,7 +97,7 @@ jobs:
         check_password: ${{ secrets.check_password }} #Required to connect to the check database
         displayName: 'Deploy Prod'
         generateDriftAndChangeReport: true
-        failReleaseIfDriftDetected: true
+        failReleaseIfDriftDetected: false
         staticCodeAnalysis: false #Currently not setup in this pipeline
 
       # Steps represent a sequence of tasks that will be executed as part of the job

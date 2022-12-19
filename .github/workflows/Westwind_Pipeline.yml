@@ -92,8 +92,13 @@ jobs:
         JDBC: ${{ secrets.JDBC }}
         userName: ${{ secrets.userName }}
         password: ${{ secrets.password }}
+        check_JDBC: ${{ secrets.check_JDBC }} #Required to connect to the check database
+        check_userName: ${{ secrets.check_userName }} #Required to connect to the check database
+        check_password: ${{ secrets.check_password }} #Required to connect to the check database
         displayName: 'Deploy Prod'
-        pauseForCodeReview: true
+        generateDriftAndChangeReport: true
+        failReleaseIfDriftDetected: true
+        staticCodeAnalysis: false #Currently not setup in this pipeline
 
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
@@ -109,9 +114,15 @@ jobs:
           
         # Runs the Flyway Migrate command within a Docker Container against the Build database
         - name: Create Check Reports
-          if: ${{ false }}
+          if: $generateDriftAndChangeReport == 'true'
           run: |
-            docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info migrate info -url="$JDBC" -cleanDisabled='false'
+            docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf -v "$GITHUB_WORKSPACE/reports":/flyway/reports $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" check -dryrun -changes -drift -checkfailOnDrift="$failReleaseIfDriftDetected" -check.buildUrl="$check_JDBC" -check.buildUser="$check_userName" -check.buildPassword="$check_password" -url="$JDBC" -check.reportFilename="/flyway/reports/$databaseName-Run-$GITHUB_RUN_ID-Check-Report.html"
+
+        - name: Publish Check Report as Artifact
+          uses: actions/upload-artifact@v2
+          with: 
+            name: flyway-artifacts
+            path: /flyway/reports/
 
 
   prod:
@@ -119,7 +130,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
     if: ${{ true }} #Set this variable to false to temporarily disable the job
-    #needs: prod-preparation
+    needs: prod-preparation
     env:
       stage: 'Prod'
       databaseName: ${{ secrets.databaseName}}

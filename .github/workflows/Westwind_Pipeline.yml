@@ -72,13 +72,21 @@ jobs:
         if: env.executeBuild == 'true'
         run: |
           docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info undo info -url="$JDBC" -cleanDisabled='false'
+
+       # Create a directory to stage the artifact files
+      - name: Stage files for publishing
+        if: env.publishArtifacts == 'true'
+        run: |
+          cp -R $GITHUB_WORKSPACE/migrations flyway/
+
       
       #After migration scripts are validated, publish them as an artifact
       - name: Publish Validated Migration Scripts as Artifact
+        if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3.1.1
         with: 
           name: flyway-artifacts
-          path: $GITHUB_WORKSPACE/migrations/*
+          path: flyway/
 
   prod-preparation:
       # The type of runner that the job will run on

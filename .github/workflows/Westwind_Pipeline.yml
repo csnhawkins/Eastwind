@@ -82,7 +82,7 @@ jobs:
   prod-preparation:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
-      environment: '' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+      environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
       needs: build
       env:
         stage: 'Prod'

@@ -43,8 +43,8 @@ jobs:
     environment: 'build' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
     env:
       stage: 'Build'
-      databaseName: 'Eastwind_Build'
-      JDBC: 'jdbc:sqlserver://azure-se-sql-database.database.windows.net:1433;encrypt=true;databaseName=Eastwind_Build'
+      databaseName: ${{ secrets.databaseName}}
+      JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
       displayName: 'Build'
@@ -79,16 +79,48 @@ jobs:
         if: ${{ false }}
         run: |
           docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info undo info -url="$JDBC" -cleanDisabled='false'
-      
+  prod-preparation:
+      # The type of runner that the job will run on
+      runs-on: ubuntu-latest
+      environment: '' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+      needs: build
+      env:
+        stage: 'Prod'
+        databaseName: ${{ secrets.databaseName}}
+        JDBC: ${{ secrets.JDBC }}
+        userName: ${{ secrets.userName }}
+        password: ${{ secrets.password }}
+        displayName: 'Deploy Prod'
+        pauseForCodeReview: true
+
+      # Steps represent a sequence of tasks that will be executed as part of the job
+      steps:
+        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        - uses: actions/checkout@v3
+
+        # Runs the Flyway Clean command within a Docker Container against the Build database
+        - name: Echo Commands
+          if: ${{ true }}
+          run: |
+            echo "The Flyway Environment Variable is - Username is $userName - Password is $password - JDBC is $JDBC - And Flyway Command is $FLYWAY"
+            echo $env
+          
+        # Runs the Flyway Migrate command within a Docker Container against the Build database
+        - name: Create Check Reports
+          if: ${{ false }}
+          run: |
+            docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info migrate info -url="$JDBC" -cleanDisabled='false'
+
+
   prod:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
-    needs: build
+    environment: 'prod-preparation' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+    needs: prod-preparation
     env:
       stage: 'Prod'
-      databaseName: 'Eastwind_Prod'
-      JDBC: 'jdbc:sqlserver://azure-se-sql-database.database.windows.net:1433;encrypt=true;databaseName=Eastwind_Prod'
+      databaseName: ${{ secrets.databaseName}}
+      JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
       displayName: 'Deploy Prod'

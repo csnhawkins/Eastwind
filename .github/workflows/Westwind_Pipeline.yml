@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.1
         with: 
           name: flyway-artifacts
-          path: $GITHUB_WORKSPACE/migrations
+          path: $GITHUB_WORKSPACE/migrations/*
 
   prod-preparation:
       # The type of runner that the job will run on

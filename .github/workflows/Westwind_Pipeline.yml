@@ -48,7 +48,7 @@ jobs:
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
       displayName: 'Build'
-      executeBuild: false
+      executeBuild: true
       publishArtifacts: true
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -86,7 +86,7 @@ jobs:
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3.1.1
         with: 
-          name: flyway-artifacts
+          name: flyway-build-artifact
           path: flyway/
 
   prod-preparation:
@@ -108,6 +108,7 @@ jobs:
         generateDriftAndChangeReport: true
         failReleaseIfDriftDetected: false
         staticCodeAnalysis: false #Currently not setup in this pipeline
+        publishArtifacts: true
 
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
@@ -127,11 +128,17 @@ jobs:
           run: |
             docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf -v "$GITHUB_WORKSPACE/reports":/flyway/reports $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" check -dryrun -changes -drift -check.failOnDrift="$failReleaseIfDriftDetected" -check.buildUrl="$check_JDBC" -check.buildUser="$check_userName" -check.buildPassword="$check_password" -url="$JDBC" -check.reportFilename="/flyway/reports/$databaseName-Run-$GITHUB_RUN_ID-Check-Report.html"
 
+         # Create a directory to stage the artifact files
+        - name: Stage files for publishing
+          if: env.publishArtifacts == 'true'
+          run: |
+            cp -R $GITHUB_WORKSPACE/reports flyway/
+
         - name: Publish Check Report as Artifact
           uses: actions/upload-artifact@v2
           with: 
-            name: flyway-artifacts
-            path: /flyway/reports/
+            name: flyway-reports
+            path: flyway/
 
 
   prod:

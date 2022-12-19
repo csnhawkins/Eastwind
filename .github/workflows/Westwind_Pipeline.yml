@@ -114,7 +114,7 @@ jobs:
           
         # Runs the Flyway Migrate command within a Docker Container against the Build database
         - name: Create Check Reports
-          if: $generateDriftAndChangeReport == 'true'
+          if: "{{ env.generateDriftAndChangeReport == 'true' }}"
           run: |
             docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf -v "$GITHUB_WORKSPACE/reports":/flyway/reports $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" check -dryrun -changes -drift -checkfailOnDrift="$failReleaseIfDriftDetected" -check.buildUrl="$check_JDBC" -check.buildUser="$check_userName" -check.buildPassword="$check_password" -url="$JDBC" -check.reportFilename="/flyway/reports/$databaseName-Run-$GITHUB_RUN_ID-Check-Report.html"
 

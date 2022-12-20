@@ -60,7 +60,7 @@ jobs:
 
       - name: Test Flyway Command using Variable
         run: |
-          $flyway info migrate info -url="$JDBC" -cleanDisabled='false'
+          $FLYWAY info migrate info -url="$JDBC" -cleanDisabled='false'
       
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB

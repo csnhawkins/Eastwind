@@ -25,7 +25,6 @@ env:
   FLYWAY_MIGRATIONS_PATH: $GITHUB_WORKSPACE/migrations
   FLYWAY_CONFIG_FILES: "$GITHUB_WORKSPACE"
   FLYWAY: docker run --rm -v "$FLYWAY_MIGRATIONS_PATH":/flyway/sql -v "$FLYWAY_CONFIG_FILES/$stage":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY"
-  DOCKERCOMMAND: $FLYWAY
 
   # If the first undo script is U002, this will validate all undo scripts up to and including that
   FIRST_UNDO_SCRIPT: 002_20221219161510
@@ -63,7 +62,7 @@ jobs:
       - name: Test Flyway Command using Variable
         run: |
           echo "The Flyway Command is - $FLYWAY"
-          echo "The Docker Command is - $DOCKERCOMMAND"
+          echo "The Docker Command is - ${{ env.dockerCommand }}"
           echo "Starting Flyway Migrate"
           $FLYWAY info migrate info -url="$JDBC" -cleanDisabled='false' -user="$userName" -password="$password"
       

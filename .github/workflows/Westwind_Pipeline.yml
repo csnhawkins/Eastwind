@@ -47,7 +47,6 @@ jobs:
       JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
-      FIRST_UNDO_SCRIPT: 002_20221219161510
       displayName: 'Build'
       executeBuild: true
       publishArtifacts: true
@@ -73,7 +72,7 @@ jobs:
       - name: undo Build DB
         if: env.executeBuild == 'true'
         run: |
-          docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info undo info -url="$JDBC" -cleanDisabled='false' -target="$(FIRST_UNDO_SCRIPT)"
+          docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/migrations -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -user="$userName" -password="$password" -licenseKey="$FLYWAY_LICENSE_KEY" info undo info -url="$JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT"
 
        # Create a directory to stage the artifact files
       - name: Stage files for publishing

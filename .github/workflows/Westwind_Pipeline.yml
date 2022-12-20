@@ -43,7 +43,7 @@ jobs:
     environment: 'build' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
     env:
       stage: 'Build'
-      dockerCommand: docker run --rm -v "$FLYWAY_MIGRATIONS_PATH":/flyway/sql -v "$FLYWAY_CONFIG_FILES/$stage":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -licenseKey="$FLYWAY_LICENSE_KEY"
+      dockerCommand: docker run --rm -v "$GITHUB_WORKSPACE/migrations":/flyway/sql -v "$GITHUB_WORKSPACE":/flyway/conf $FLYWAY_DOCKER_IMAGE flyway -licenseKey="$FLYWAY_LICENSE_KEY"
       # Environment Secrets - Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrects > Actions section, specially related to the environment in question) #
       databaseName: ${{ secrets.databaseName}} 
       JDBC: ${{ secrets.JDBC }} 
@@ -64,7 +64,7 @@ jobs:
           echo "The Flyway Command is - $FLYWAY"
           echo "The Docker Command is - ${{ env.dockerCommand }}"
           echo "Starting Flyway Migrate"
-          $FLYWAY info migrate info -url="$JDBC" -cleanDisabled='false' -user="$userName" -password="$password"
+          $dockerCommand info migrate info -url="$JDBC" -cleanDisabled='false' -user="$userName" -password="$password"
       
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB

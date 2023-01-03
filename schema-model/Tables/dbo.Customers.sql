@@ -10,7 +10,6 @@ CREATE TABLE [dbo].[Customers]
 [PostalCode] [nvarchar] (10) NULL,
 [Country] [nvarchar] (15) NULL,
 [Phone] [nvarchar] (24) NULL,
-[WorkPhone] [int] NULL,
 [Fax] [nvarchar] (24) NULL,
 [LinkedIn] [nvarchar] (50) NULL,
 [RegionCode] [nvarchar] (20) NULL,

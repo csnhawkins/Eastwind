@@ -15,7 +15,7 @@
       "displayName": "Westwind (Shadow Database)",
       "connectionProvider": {
         "type": "UsernamePassword",
-        "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Shadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+        "url": "jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=Westwind_Shadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
       }
     },
     "targetDatabases": [
@@ -42,6 +42,27 @@
     "connectionProvider": {
       "type": "UsernamePassword",
       "url": "jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=Westwind_Dev;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+    }
+  },
+  "capabilities": {
+    "staticData": {
+      "configuredTables": [
+        {
+          "schema": "dbo",
+          "table": "Region",
+          "excludedColumns": []
+        },
+        {
+          "schema": "dbo",
+          "table": "Shippers",
+          "excludedColumns": []
+        },
+        {
+          "schema": "dbo",
+          "table": "Suppliers",
+          "excludedColumns": []
+        }
+      ]
     }
   }
 }

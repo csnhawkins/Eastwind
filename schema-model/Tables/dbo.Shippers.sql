@@ -4,9 +4,7 @@ CREATE TABLE [dbo].[Shippers]
 [CompanyName] [nvarchar] (40) NOT NULL,
 [Phone] [nvarchar] (24) NULL,
 [id] [int] NULL,
-[ShipId] [int] NULL,
-[foo] [nvarchar] (20) NULL,
-[foo2] [nvarchar] (20) NULL
+[ShipId] [int] NULL
 )
 GO
 ALTER TABLE [dbo].[Shippers] ADD CONSTRAINT [PK_Shippers] PRIMARY KEY CLUSTERED ([ShipperID])

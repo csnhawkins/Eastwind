@@ -57,7 +57,7 @@ jobs:
         run: echo "flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations"=FLYWAY" >> $GITHUB_ENV
 
       - name: Test Flyway Command using Variable
-        if: env.executeBuild == 'true'
+        if: env.executeBuild == 'false'
         run: |
           echo "The working directory is - ${{ GITHUB.WORKSPACE }}"
           echo "The license key is = ${{ env.FLYWAY_LICENSE_KEY }}"

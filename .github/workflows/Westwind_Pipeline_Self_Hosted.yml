@@ -59,17 +59,17 @@ jobs:
         #shell: pwsh
         continue-on-error: true
         env:
-          flyway: flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations"
+          flyway: 'flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations"'
           
 
       - name: Test Flyway Command using Variable
         if: ${{ true }}
-        shell: pwsh
+        #shell: pwsh
         continue-on-error: true
         run: |
           echo "The working directory is - ${{ GITHUB.WORKSPACE }}"
           echo "The license key is = ${{ env.FLYWAY_LICENSE_KEY }}"
-          ${{ env.FLYWAY_COMMAND }} info -url="${{ env.JDBC }}" -url="${{ env.JDBC }}"
+          ${{ env.FLYWAY_COMMAND }} info -url="${{ env.JDBC }}" 
       
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB

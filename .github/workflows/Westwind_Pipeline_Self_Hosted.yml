@@ -59,7 +59,7 @@ jobs:
         #shell: pwsh
         continue-on-error: true
         env:
-          flyway: \\"flyway -user=\"${{ env.userName }}\" -password=\"${{ env.password }}\" -licenseKey=\"${{ env.FLYWAY_LICENSE_KEY }}\" -configFiles=\"${{ GITHUB.WORKSPACE }}\flyway.conf\" -locations=\"filesystem:${{ GITHUB.WORKSPACE }}\migrations\" -baselineOnMigrate=\"true\"\"
+          flyway: flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" -baselineOnMigrate="true"
           
 
       - name: Test Flyway Command using Variable

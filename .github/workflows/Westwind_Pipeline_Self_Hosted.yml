@@ -56,7 +56,7 @@ jobs:
         if: env.executeBuild == 'true'
         run: |
           echo "The working directory is - $GITHUB_WORKSPACE"
-          $flyway info
+          flyway -user="${{ secrets.userName }}" -password="${{ secrets.password }}" -baselineOnMigrate="true" -licenseKey="$FLYWAY_LICENSE_KEY" -configFiles="$GITHUB_WORKSPACE\flyway.conf" -locations="filesystem:$GITHUB_WORKSPACE\migrations" info
       
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB

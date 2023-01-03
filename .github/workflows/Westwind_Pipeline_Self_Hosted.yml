@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Test Flyway Command using Variable
-        if: env.executeBuild == 'true'
+        if: env.executeBuild == 'false'
         run: |
           echo "The working directory is - ${{ GITHUB.WORKSPACE }}"
           echo "The license key is = ${{ env.FLYWAY_LICENSE_KEY }}"
@@ -64,25 +64,25 @@ jobs:
       - name: Clean Build DB
         if: env.executeBuild == 'true'
         run: |
-          $flyway info clean info -url="$JDBC" -cleanDisabled='false'
+          $flyway info clean info -url="${{ env.JDBC }}" -cleanDisabled='false'
         
       # Runs the Flyway Migrate command within a Docker Container against the Build database
       - name: Migrate Build DB
         if: env.executeBuild == 'true'
         run: |
-          $flyway info migrate info -url="$JDBC" -cleanDisabled='false'
+          $flyway info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
       # Runs the Flyway Undo command within a Docker Container against the Build database
       - name: undo Build DB
         if: env.executeBuild == 'true'
         run: |
-          $flyway info undo info -url="$JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT"
+          $flyway info undo info -url="${{ env.JDBC }}" -cleanDisabled='false' -target="${{ env.FIRST_UNDO_SCRIPT }}"
 
        # Create a directory to stage the artifact files
       - name: Stage files for publishing
         if: env.publishArtifacts == 'true'
         run: |
-          cp -R $GITHUB_WORKSPACE/migrations flyway/
+          cp -R ${{ GITHUB.WORKSPACE }}/migrations flyway/
 
       
       #After migration scripts are validated, publish them as an artifact

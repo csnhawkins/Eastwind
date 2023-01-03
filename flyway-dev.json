@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "id": "78dbbc7b-6e5c-4a60-9b4a-798a92d9a062",
-  "name": "",
+  "name": "Westwind GitHub",
   "databaseType": "SqlServer",
   "development": {
     "scriptsFolder": "./schema-model"

@@ -5,7 +5,7 @@
   "databaseType": "SqlServer",
   "developmentDatabase": {
     "connectionProvider": {
-      "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Dev;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
+      "url": "jdbc:sqlserver://SLS-LT-CHRIS4;instanceName=SQLEXPRESS;databaseName=Westwind_Dev;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
       "type": "UsernamePassword"
     },
     "displayName": "Westwind (Development Database)"
@@ -19,7 +19,7 @@
     ],
     "shadowDatabase": {
       "connectionProvider": {
-        "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Shadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
+        "url": "jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=Westwind_Shadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
         "type": "UsernamePassword"
       },
       "displayName": "Westwind (Shadow Database)"

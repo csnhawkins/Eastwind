@@ -112,10 +112,10 @@ jobs:
         stage: 'Prod'
         # Environment Secrets - Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrects > Actions section, specially related to the environment in question) #
         databaseName: Westwind_Prod
-        JDBC: jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=Westwind_Prod;encrypt=true;integratedSecurity=true;trustServerCertificate=true
+        JDBC: jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=Westwind_Prod;encrypt=true;trustServerCertificate=true
         userName: Redgate
         password: Redg@te1
-        check_JDBC: jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=Westwind_Check;encrypt=true;integratedSecurity=true;trustServerCertificate=true
+        check_JDBC: jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=Westwind_Check;encrypt=true;trustServerCertificate=true
         check_userName: Redgate
         check_password: Redg@te1 
         # End of Environment Secrets #

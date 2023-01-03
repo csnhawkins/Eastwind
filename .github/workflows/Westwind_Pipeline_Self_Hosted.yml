@@ -37,7 +37,7 @@ jobs:
     environment: 'build' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
     env:
       stage: 'Build'
-      flyway: flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations"
+      flyway: flyway -user="${{ secrets.userName }}" -password="${{ secrets.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations"
       # Environment Secrets - Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrects > Actions section, specially related to the environment in question) #
       databaseName: ${{ secrets.databaseName}} 
       JDBC: ${{ secrets.JDBC }} 

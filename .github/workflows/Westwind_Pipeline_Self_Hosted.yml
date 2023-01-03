@@ -55,6 +55,7 @@ jobs:
       - name: Create Flyway Command Variable
         run: |
             echo FLYWAY_COMMAND=${{ env.flyway }} | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+            $FLYWAY_COMMAND info 
         #shell: pwsh
         continue-on-error: true
         env:
@@ -67,7 +68,7 @@ jobs:
         run: |
           echo "The working directory is - ${{ GITHUB.WORKSPACE }}"
           echo "The license key is = ${{ env.FLYWAY_LICENSE_KEY }}"
-          $(FLYWAY) info -url="${{ env.JDBC }}"
+          $(FLYWAY) info -url="${{ env.JDBC }}" -url="${{ env.JDBC }}"
       
       # Runs the Flyway Clean command within a Docker Container against the Build database
       - name: Clean Build DB

@@ -2,18 +2,18 @@
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
+PRINT N'Dropping [dbo].[getCustomers]'
+GO
+DROP PROCEDURE [dbo].[getCustomers]
+GO
 PRINT N'Altering [dbo].[Customers]'
 GO
-ALTER TABLE [dbo].[Customers] ADD
-[WorkPhone] [int] NULL
+ALTER TABLE [dbo].[Customers] DROP
+COLUMN [WorkPhone]
 GO
 PRINT N'Refreshing [dbo].[Customer and Suppliers by City]'
 GO
 EXEC sp_refreshview N'[dbo].[Customer and Suppliers by City]'
-GO
-PRINT N'Refreshing [dbo].[Invoices]'
-GO
-EXEC sp_refreshview N'[dbo].[Invoices]'
 GO
 PRINT N'Refreshing [dbo].[Orders Qry]'
 GO
@@ -22,6 +22,10 @@ GO
 PRINT N'Refreshing [dbo].[Quarterly Orders]'
 GO
 EXEC sp_refreshview N'[dbo].[Quarterly Orders]'
+GO
+PRINT N'Refreshing [dbo].[Invoices]'
+GO
+EXEC sp_refreshview N'[dbo].[Invoices]'
 GO
 PRINT N'Refreshing [dbo].[Sales Totals by Amount]'
 GO

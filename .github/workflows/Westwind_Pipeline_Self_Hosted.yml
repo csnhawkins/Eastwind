@@ -54,9 +54,9 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: Create Flyway Command Variable
-        shell: pwsh
         run: |
             echo "FLYWAY=flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        #shell: pwsh
 
       - name: Test Flyway Command using Variable
         if: env.executeBuild == 'true'

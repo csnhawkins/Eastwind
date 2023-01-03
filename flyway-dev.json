@@ -1,47 +1,47 @@
 {
   "version": "2.0",
-  "name": "",
   "id": "78dbbc7b-6e5c-4a60-9b4a-798a92d9a062",
+  "name": "",
   "databaseType": "SqlServer",
-  "developmentDatabase": {
-    "connectionProvider": {
-      "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Dev;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
-      "type": "UsernamePassword"
-    },
-    "displayName": "Westwind (Development Database)"
-  },
   "development": {
     "scriptsFolder": "./schema-model"
   },
   "deployment": {
+    "generateUndoScripts": true,
     "flywayConfFiles": [
       "./flyway.conf"
     ],
     "shadowDatabase": {
+      "displayName": "Westwind (Shadow Database)",
       "connectionProvider": {
-        "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Shadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
-        "type": "UsernamePassword"
-      },
-      "displayName": "Westwind (Shadow Database)"
+        "type": "UsernamePassword",
+        "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Shadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+      }
     },
-    "generateUndoScripts": true,
     "targetDatabases": [
       {
-        "connectionProvider": {
-          "url": "jdbc:sqlserver://localhost;databaseName=Westwind;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
-          "type": "UsernamePassword"
-        },
         "schemas": [],
-        "displayName": "Westwind (Production)"
+        "displayName": "Westwind (Production)",
+        "connectionProvider": {
+          "type": "UsernamePassword",
+          "url": "jdbc:sqlserver://localhost;databaseName=Westwind;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+        }
       },
       {
-        "connectionProvider": {
-          "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Test;encrypt=true;integratedSecurity=true;trustServerCertificate=true",
-          "type": "UsernamePassword"
-        },
         "schemas": [],
-        "displayName": "Westwind (Test Database)"
+        "displayName": "Westwind (Test Database)",
+        "connectionProvider": {
+          "type": "UsernamePassword",
+          "url": "jdbc:sqlserver://localhost;databaseName=Westwind_Test;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+        }
       }
     ]
+  },
+  "developmentDatabase": {
+    "displayName": "Westwind (Development Database)",
+    "connectionProvider": {
+      "type": "UsernamePassword",
+      "url": "jdbc:sqlserver://localhost;instanceName=SQLEXPRESS;databaseName=Westwind_Dev;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+    }
   }
 }

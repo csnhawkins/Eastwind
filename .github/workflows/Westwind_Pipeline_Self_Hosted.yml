@@ -57,7 +57,7 @@ jobs:
         if: env.executeBuild == 'true'
         run: |
           echo "The working directory is - ${{ GITHUB.WORKSPACE }}"
-          echo "The license key is = $(FLYWAY_LICENSE_KEY)"
+          echo "The license key is = ${{ env.FLYWAY_LICENSE_KEY }}"
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info -url="${{ env.JDBC }}"
       
       # Runs the Flyway Clean command within a Docker Container against the Build database
